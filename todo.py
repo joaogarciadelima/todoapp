@@ -26,4 +26,11 @@ def criar():
     tarefas.append(tarefa)
     return jsonify(tarefa), 201
 
+@app.route('/task/<int:id_tarefa>', methods=['DELETE'])
+def remover(id_tarefa):
+    tarefa = [tarefa for tarefa in tarefas if tarefa['id'] == id_tarefa]
+    if not tarefa:
+        abort(404)
+    tarefas.remove(tarefa[0])
+    return '', 204
 
