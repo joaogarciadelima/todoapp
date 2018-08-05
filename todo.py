@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 from flask import Flask, jsonify, request, abort
 
 app = Flask ('TODO')
@@ -6,7 +8,7 @@ tarefas = []
 
 @app.route ('/task')
 def listar():
-    return jsonify (tarefas)
+    return jsonify (sorted(tarefas, key=itemgetter('estado')))
 
 
 @app.route('/task', methods=['POST'])

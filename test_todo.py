@@ -75,6 +75,19 @@ def test_criar_tarefa_sem_titulo():
         content_type='application/json')
     assert resposta.status_code == 400
 
+def test_listar_tarefas_deve_apresentar_tarefas_nao_finalizadas_primeiro():
+    tarefas.clear()
+    tarefas.append({'id': 1, 'titulo': 'tarefa 1', 'descricao': 'tarefa de numero 1',
+                    'estado': True})
+    tarefas.append({'id': 2, 'titulo': 'tarefa 2', 'descricao': 'tarefa de numero 2',
+                    'estado': False})
+    with app.test_client() as cliente:
+        resposta = cliente.get('/task')
+        data = json.loads(resposta.data.decode('utf-8'))
+        primeira_task, segunda_task = data
+        assert primeira_task['titulo'] == 'tarefa 2'
+        assert segunda_task['titulo'] == 'tarefa 1'
+
 # def test_lista_de_tarefas_nao_vazia_retorna_conteudo():
 #     tarefas.append({'id': 1, 'titulo': 'tarefa 1',
 #                     'descricao': 'tarefa de numero 1', 'estado': False})
