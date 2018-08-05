@@ -34,3 +34,11 @@ def remover(id_tarefa):
     tarefas.remove(tarefa[0])
     return '', 204
 
+
+@app.route('/task/<int:id_tarefa>', methods=['GET'])
+def detalhar(id_tarefa):
+    tarefa = [tarefa for tarefa in tarefas if tarefa['id'] == id_tarefa]
+    if not tarefa:
+        abort(404)
+    return jsonify(tarefa[0])
+

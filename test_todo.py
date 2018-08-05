@@ -121,6 +121,28 @@ def test_remover_tarefa_nao_existente():
     resposta = cliente.delete('/task/1', content_type='application/json')
     assert resposta.status_code == 404
 
+
+def test_detalhar_tarefa_existente():
+    tarefas.clear()
+    tarefas.append({'id': 1, 'titulo': 'titulo',
+                    'descricao': 'descricao', 'entregue': False})
+    cliente = app.test_client()
+    resposta = cliente.get('/task/1', content_type='application/json')
+    data = json.loads(resposta.data.decode('utf-8'))
+    assert resposta.status_code == 200
+    assert data['id'] == 1
+    assert data['titulo'] == 'titulo'
+    assert data['descricao'] == 'descricao'
+    assert data['entregue'] is False
+
+
+
+def test_detalhar_tarefa_nao_existente():
+    tarefas.clear()
+    cliente = app.test_client()
+    resposta = cliente.get('/task/1', content_type='application/json')
+    assert resposta.status_code == 404
+
 # def test_lista_de_tarefas_nao_vazia_retorna_conteudo():
 #     tarefas.append({'id': 1, 'titulo': 'tarefa 1',
 #                     'descricao': 'tarefa de numero 1', 'estado': False})
